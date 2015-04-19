@@ -1,0 +1,343 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+
+// bower:scss
+@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
+// endbower
+
+$color-text: #ffffff;
+$color-amount-text: #d69f48;
+$color-highlight: #bcbcbc;
+$color-card: #041173;
+
+$font-amount: fantasy, sans-serif;
+$font-clue: 'Poly', serif;
+
+@mixin transform($options) {
+  -webkit-transform: $options;
+  transform:         $options;
+}
+
+@mixin transition($options) {
+  -webkit-transition: $options;
+  -moz-transition:    $options;
+  -ms-transition:     $options;
+  -o-transition:      $options;
+  transition:         $options;
+}
+
+@mixin selectable($option) {
+    -webkit-touch-callout: $option;
+    -webkit-user-select: $option;
+    -khtml-user-select: $option;
+    -moz-user-select: $option;
+    -ms-user-select: $option;
+    user-select: $option;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url(/images/binding_dark.png);
+	text-shadow: 5px 5px 1px rgba(0, 0, 0, 1);
+}
+
+.board, .start-screen {
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.start-screen {
+    padding-top: 10em;
+    font-family: $font-amount;
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    h1 {
+        font-size: 5vw;
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    div {
+        margin: 0 auto;
+        background: $color-card;
+        border-radius: 5px;
+        width: 75%;
+        height: 75%;
+        padding: 5em;
+        color: $color-amount-text;
+        position: relative;
+    }
+    
+    a {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        cursor: pointer;
+        font-size: 3em;
+        padding: 1em;
+        text-align: center;
+        width: 100%;
+        color: $color-text;
+        @include transition(transform .5s ease-in-out);
+
+        &:hover {
+            color: $color-highlight;
+            @include transform(scale(1.15));
+            text-decoration: none;
+        }
+
+        i {
+            @extend .glyphicon;
+            @extend .glyphicon-arrow-right;
+        }
+    }
+}
+
+.board {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none; // board hidden by default
+
+    ul {
+        margin: 0 .25em;
+        padding: 0;
+    }
+
+    a, label.show-answer {
+        @include transition(transform .5s ease-in-out);
+
+        &:hover {
+            color: $color-highlight;
+            @include transform(scale(1.15));
+            text-decoration: none;
+        }
+    }
+
+
+    .categories > ul { 
+        list-style: none;
+        height: 100%;
+    }
+}
+
+.categories {
+    height: 100%;
+    li {
+        height: 100%;
+        display: inline-block;
+        float: left;
+        width: 160px / 960px * 100%;
+    }
+}
+
+.category {
+    height: 100%;
+    ul {
+        height: 100%;
+    }
+    li {
+        &:first-child {
+            height: 100px / 960px * 100%;
+        }
+
+        float: none;
+        display: block;
+        width: 100%;
+        height: 172px / 960px * 100%;
+    }
+}
+
+.card {
+    border: solid 1px #000;
+    border-radius: 5px;
+    margin: 0 0 1em 0;
+    height: 97%;
+    font-size: 2em;
+    background: $color-card;
+
+    &:target {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        animation: selectCard .75s 1 forwards ease-out;
+
+        span.amount {
+            display: none;
+        }
+
+        a.open-card {
+            display: none;
+        }
+
+        a.close-card, label.show-answer {
+            position: absolute;
+            opacity: 0;
+            right: 1em;
+            display: inline;
+            animation: reveal .5s 1s 1 forwards;
+        }
+
+        a.close-card {
+            top: .5em;
+            font-size: 2vw;
+            i {
+                @extend .glyphicon;
+                @extend .glyphicon-remove;
+            }
+        }
+
+        label.show-answer {
+            bottom: .5em;
+        }
+
+        div.clue {
+            display: block;
+            opacity: 0;
+            position: absolute;
+
+            top: 40%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            animation: reveal .5s 1.5s 1 forwards;
+        }
+
+        input[type=checkbox]:checked ~ div.clue {
+            display: none;
+        }
+
+        input[type=checkbox]:checked ~ div.answer {
+            display: block;
+            opacity: 0;
+            position: absolute;
+
+            top: 40%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            animation: reveal .5s 1 forwards;
+        }
+    }
+
+    &.header {
+        border-bottom: solid 1px #000;
+    }
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: block;
+        color: $color-text;
+
+        &.close-card {
+            text-decoration: none;
+            text-transform: none;
+            display: none;
+            width: auto;
+            height: auto;
+        }
+    }
+
+    label.show-answer {
+        width: 1em;
+        height: 1em;
+        cursor: pointer;
+        display: none;
+        color: $color-text;
+        font-size: 2vw;
+
+        i {
+            @extend .glyphicon;
+            @extend .glyphicon-arrow-right;
+        }
+    }
+
+    h2 {
+        font-size: .75em;
+        font-size: 2vw;
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        height: 95%;
+        cursor: default;
+        color: $color-text;
+        @include selectable(none);
+    }
+
+    input[type=checkbox] {
+        display: none;
+        &:checked + .amount {
+            display: none;
+        }
+    }
+
+    h2, a.open-card {
+        position: relative;
+        top: 65%;
+        transform: translateY(-50%);
+
+        span {
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            font-family: $font-amount;
+            display: inline-block;
+
+            &.amount {
+                color: $color-amount-text;
+                font-size: 2em;
+                font-size: 5vw;
+            }
+        }
+    }
+
+    .clue, .answer {
+        display: none;
+        color: $color-text;
+        text-transform: uppercase;
+        text-align: center;
+        cursor: default;
+        font-size: 4vw;
+        font-family: $font-clue;
+        @include selectable(none);
+    }
+}
+
+.open-card {
+    @include transition(transform .5s ease-in-out);
+
+    &:hover {
+        color: $color-highlight;
+        @include transform(scale(1.15));
+        text-decoration: none;
+    }
+}
+
+@keyframes selectCard {
+    to {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
